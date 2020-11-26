@@ -1,0 +1,22 @@
+#!/bin/bash
+
+## Description: Add phpstorm data source configuration file
+## Usage: phpstormsql
+## Example: "ddev phpstormsql"
+
+PHPSTORM_DATASOURCE=`cat <<EOF
+<?xml version="1.0" encoding="UTF-8"?>
+ <project version="4">
+   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
+     <data-source source="LOCAL" name="@localhost" uuid="b8d06c9b-6639-43c5-a42a-622e8c7f570d">
+       <driver-ref>mariadb</driver-ref>
+       <synchronize>true</synchronize>
+       <jdbc-driver>org.mariadb.jdbc.Driver</jdbc-driver>
+       <jdbc-url>jdbc:mariadb://127.0.0.1:${DDEV_HOST_DB_PORT}/db</jdbc-url>
+     </data-source>
+   </component>
+ </project>
+EOF
+`
+mkdir -d .idea
+echo ${PHPSTORM_DATASOURCE} > .idea/dataSources.xml
