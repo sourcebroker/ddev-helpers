@@ -4,19 +4,24 @@
 ## Usage: phpstormsql
 ## Example: "ddev phpstormsql"
 
-PHPSTORM_DATASOURCE=`cat <<EOF
+mkdir -p .idea
+
+if [ ! -e .idea/dataSources.xml ];
+then
+    cat <<EOT >> .idea/dataSources.xml
 <?xml version="1.0" encoding="UTF-8"?>
- <project version="4">
-   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-     <data-source source="LOCAL" name="@localhost" uuid="b8d06c9b-6639-43c5-a42a-622e8c7f570d">
-       <driver-ref>mariadb</driver-ref>
-       <synchronize>true</synchronize>
-       <jdbc-driver>org.mariadb.jdbc.Driver</jdbc-driver>
-       <jdbc-url>jdbc:mariadb://127.0.0.1:${DDEV_HOST_DB_PORT}/db</jdbc-url>
-     </data-source>
-   </component>
- </project>
-EOF
-`
-mkdir -d .idea
-echo ${PHPSTORM_DATASOURCE} > .idea/dataSources.xml
+<project version="4">
+  <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
+    <data-source source="LOCAL" name="@localhost" uuid="ea048cf3-c82b-4931-8457-9b0f708849c5">
+      <driver-ref>mysql.8</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
+      <jdbc-url>jdbc:mysql://root:root@localhost:${DDEV_HOST_DB_PORT}</jdbc-url>
+    </data-source>
+  </component>
+</project>
+EOT
+
+else
+    sed -i -E "s=jdbc:mysql://root:root@localhost:[0-9]+=jdbc:mysql://root:root@localhost:${DDEV_HOST_DB_PORT}=g" .idea/dataSources.xml
+fi
