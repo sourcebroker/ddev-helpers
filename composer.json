@@ -1,5 +1,5 @@
 {
-	"name": "sourcebroker/ddev-helper",
+	"name": "sourcebroker/ddev-helpers",
 	"description": "Ddev commands and config for standard projects of SourceBroker",
 	"license": "GPL-2.0-or-later",
 	"bin": [
