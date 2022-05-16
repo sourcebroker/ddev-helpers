@@ -1,0 +1,7 @@
+version: '3.6'
+services:
+  web:
+    environment:
+      -  FRONTEND_BUILD=npm run production
+      -  FRONTEND_WATCH=npm run dev-server
+      -  FRONTEND_WATCH_HOST=npm run dev-server-host

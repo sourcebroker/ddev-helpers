@@ -1,0 +1,13 @@
+#sb-generated
+
+# Expose encore dev-server port inside web container.
+# If you want to set up different port set hooks you need to run FRONTEND_WATCH_PORT=xxxx before ddev start (TODO)
+
+version: '3.6'
+services:
+  web:
+    ports:
+      - "127.0.0.1:$DDEV_HOST_HTTPS_PORT:8080"
+    environment:
+      -  HTTP_EXPOSE=${DDEV_ROUTER_HTTP_PORT}:80,${DDEV_MAILHOG_PORT}:8025,8181:${FRONTEND_WATCH_PORT:-8080}
+      -  HTTPS_EXPOSE=${DDEV_ROUTER_HTTPS_PORT}:80,${DDEV_MAILHOG_HTTPS_PORT}:8025,${FRONTEND_WATCH_PORT:-8080}:${FRONTEND_WATCH_PORT:-8080}

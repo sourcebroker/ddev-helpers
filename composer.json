@@ -1,0 +1,10 @@
+{
+	"name": "sourcebroker/ddev-helper",
+	"description": "Ddev commands and config for standard projects of SourceBroker",
+	"license": "GPL-2.0-or-later",
+	"bin": [
+		"bin/sb-copy",
+		"bin/sb--ddev-hook--after-start--typo3",
+		"bin/sb--ddev-hook--pre-start--typo3"
+	]
+}

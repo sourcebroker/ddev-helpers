@@ -1,0 +1,10 @@
+#sb-generated
+
+# Open phpmyadmin as root user.
+
+version: '3.6'
+services:
+  dba:
+    environment:
+      - PMA_USER=root
+      - PMA_PASSWORD=root

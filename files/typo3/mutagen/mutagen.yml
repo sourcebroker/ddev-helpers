@@ -1,0 +1,25 @@
+#sb-generated
+
+# https://ddev.readthedocs.io/en/latest/users/performance/#using-mutagen
+# https://mutagen.io/documentation/introduction/configuration
+sync:
+  defaults:
+    mode: "two-way-resolved"
+    stageMode: "neighboring"
+    ignore:
+      paths:
+      # standard ddev
+      - "/.git"
+      - "/.tarballs"
+      - "/.ddev/db_snapshots"
+      - "/.ddev/.importdb*"
+      - ".DS_Store"
+      - "/public/fileadmin"
+
+      # additional
+      - "/.dep"
+      - "/fileadmin"
+      - "/public/uploads"
+      - "/uploads"
+    symlink:
+      mode: "posix-raw"

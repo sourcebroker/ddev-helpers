@@ -1,0 +1,12 @@
+#!/bin/bash
+
+# Create TYPO3_CONTEXT. It allows to easily switch between Development/Production and Instances.
+if [ ! -e .env ]; then printf "TYPO3_CONTEXT=\"Development/Staging/Local\" \nINSTANCE=\"local\"" > .env ; fi
+
+# Delete all cache files in /var/ except labels which are in git.
+find /var/www/html/var/ -mindepth 1 ! -regex '^/var/www/html/var/labels\(/.*\)?' -delete
+
+# Copy certs for those cases when developer use node in his host instead of inside web container.
+mkdir -p /var/www/html/"$PATH_FRONTEND"/certs && cp /etc/ssl/certs/master.* /var/www/html/"$PATH_FRONTEND"/certs/
+
+composer install
