@@ -18,7 +18,7 @@ echo "${TEXT_GREEN}Coping command for type '${type}'${TEXT_RESET}"
 find "$mainDirWithType" -type f -print0 |
     while IFS= read -r -d '' sourceFile; do
         copy=0
-        targetFile=".ddev/${sourceFile/$mainDirWithType/}"
+        targetFile=".ddev${sourceFile/$mainDirWithType/}"
         targetFolder=$(dirname "$targetFile")
         if [[ ! -e $targetFile ]]; then
           echo "${TEXT_GREEN}copy ${sourceFile} to ${targetFolder} (target file does not yet exist - first copy)${TEXT_RESET}"
