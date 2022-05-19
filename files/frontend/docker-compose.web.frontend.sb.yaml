@@ -7,4 +7,4 @@ services:
       -  FRONTEND_WATCH=npm ci && npm run dev-server
       -  FRONTEND_WATCH_NO_PACKAGE_INSTALL=npm run dev-server
       -  FRONTEND_WATCH_HOST=npm ci && npm run dev-server-host
-      -  FRONTEND_WATCH_NO_PACKAGE_INSTALL=npm run dev-server-host
+      -  FRONTEND_WATCH_HOST_NO_PACKAGE_INSTALL=npm run dev-server-host

@@ -18,7 +18,7 @@ else
     fi
 fi
 
-cd "$PATH_FRONTEND" || exit 1
+cd "$FRONTEND_PATH" || exit 1
 
 NODE_VERSION=$(node -v)
 NVMRC_NODE_VERSION=$(nvm version "$(cat .nvmrc)")
