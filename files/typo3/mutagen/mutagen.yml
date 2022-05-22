@@ -8,18 +8,22 @@ sync:
     stageMode: "neighboring"
     ignore:
       paths:
-      # standard ddev
-      - "/.git"
-      - "/.tarballs"
-      - "/.ddev/db_snapshots"
-      - "/.ddev/.importdb*"
-      - ".DS_Store"
-      - "/public/fileadmin"
+        # standard ddev
+        - "/.git"
+        - "/.tarballs"
+        - "/.ddev/db_snapshots"
+        - "/.ddev/.importdb*"
+        - ".DS_Store"
+        - "/public/fileadmin"
 
-      # additional
-      - "/.dep"
-      - "/fileadmin"
-      - "/public/uploads"
-      - "/uploads"
+        # additional
+        - "/.dep"
+        - "/fileadmin"
+        - "/typo3temp"
+        - "/uploads"
+        - "/public/uploads"
+        - "/public/typo3temp"
+        - "/var/*"
+        - "!/var/labels"
     symlink:
       mode: "posix-raw"
