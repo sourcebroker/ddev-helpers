@@ -1,5 +1,5 @@
 #!/bin/bash
 
-./vendor/bin/sb-copy general
-./vendor/bin/sb-copy frontend
-./vendor/bin/sb-copy typo3
+bash ./sb-copy general
+bash ./sb-copy frontend
+bash ./sb-copy typo3
