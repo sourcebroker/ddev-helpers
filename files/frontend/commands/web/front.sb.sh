@@ -37,16 +37,16 @@ fi
 
 if [[ $1 = "build" ]]; then
     if [[ $NO_INSTALL = "1" ]]; then
-        ${FRONTEND_BUILD_NO_PACKAGE_INSTALL}
+        bash -c "${FRONTEND_BUILD_NO_PACKAGE_INSTALL}"
     else
-        ${FRONTEND_BUILD}
+        bash -c "${FRONTEND_BUILD}"
     fi
 fi
 
 if [[ $1 = "watch" ]]; then
     if [[ $NO_INSTALL = "1" ]]; then
-        ${FRONTEND_WATCH_NO_PACKAGE_INSTALL}
+        bash -c "${FRONTEND_WATCH_NO_PACKAGE_INSTALL}"
     else
-        ${FRONTEND_WATCH}
+        bash -c "${FRONTEND_WATCH}"
     fi
 fi
