@@ -16,7 +16,7 @@ if [[ ! -e $mainDirWithType ]]; then
     echo
     exit 1
 fi
-echo "${TEXT_GREEN}Coping command for type '${type}'${TEXT_RESET}"
+echo "${TEXT_GREEN}Coping commands for type '${type}'${TEXT_RESET}"
 find "$mainDirWithType" -type f -print0 |
     while IFS= read -r -d '' sourceFile; do
         copy=0
