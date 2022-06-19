@@ -19,4 +19,4 @@ if [ ! -e vendor ]; then composer install ; fi
 if [ "${FRONTEND_OUTPUT_PATH}" = "" ]; then echo "${TEXT_RED}Add FRONTEND_OUTPUT_PATH to config.yaml->web_environment${TEXT_RESET}" && exit 1 ; fi
 
 # If it is first start then build front
-if [ ! -e "${FRONTEND_OUTPUT_PATH}" ]; then cd "${FRONTEND_PATH}" && ${FRONTEND_BUILD} ; fi
+if [ ! -e "${FRONTEND_OUTPUT_PATH}" ]; then cd "${FRONTEND_PATH}" && bash -c "${FRONTEND_BUILD}" ; fi

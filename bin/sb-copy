@@ -10,23 +10,22 @@ targetDir="../.."
 type=${1:-general}
 mainDirWithType=$sourceDir/$type
 
-echo
 if [[ ! -e $mainDirWithType ]]; then
     echo "${TEXT_RED}No folder named '$mainDirWithType'${TEXT_RESET}"
     echo
     exit 1
 fi
-echo "${TEXT_GREEN}Coping commands for type '${type}'${TEXT_RESET}"
+echo "${TEXT_GREEN}Coping ddev-helpers commands for type '${type}'${TEXT_RESET}"
 find "$mainDirWithType" -type f -print0 |
     while IFS= read -r -d '' sourceFile; do
         copy=0
         targetFile="${sourceFile/$mainDirWithType/}"
         targetFolder="${targetDir}$(dirname "$targetFile")"
         if [[ ! -e $targetFile ]]; then
-          echo "${TEXT_GREEN}copy ${sourceFile} to ${targetFolder} (target file does not yet exist - first copy)${TEXT_RESET}"
+          # echo "- ${TEXT_GREEN}copy ${sourceFile} to ${targetFolder} (target file does not yet exist - first copy)${TEXT_RESET}"
           copy=1
         elif grep -q -e "#sb-generated" -e "#ddev-generated" "$targetFile" ; then
-          echo "${TEXT_GREEN}copy ${sourceFile} to ${targetFolder} (target exists but is sb-generated so can be updated)${TEXT_RESET}"
+          # echo "- ${TEXT_GREEN}copy ${sourceFile} to ${targetFolder} (target exists but is sb-generated so can be updated)${TEXT_RESET}"
           copy=1
         fi
 
@@ -35,4 +34,3 @@ find "$mainDirWithType" -type f -print0 |
             cp "$sourceFile" "$targetFolder"
         fi
     done
-echo
