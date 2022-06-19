@@ -4,9 +4,9 @@ version: '3.6'
 services:
   web:
     environment:
-      -  FRONTEND_BUILD=npm ci && npm run production
-      -  FRONTEND_BUILD_NO_PACKAGE_INSTALL=npm run production
-      -  FRONTEND_WATCH=npm ci && npm run dev-server
-      -  FRONTEND_WATCH_NO_PACKAGE_INSTALL=npm run dev-server
-      -  FRONTEND_WATCH_HOST=npm ci && npm run dev-server-host
-      -  FRONTEND_WATCH_HOST_NO_PACKAGE_INSTALL=npm run dev-server-host
+      -  FRONTEND_BUILD=nvm install --latest-npm && npm ci && npm run production
+      -  FRONTEND_BUILD_NO_PACKAGE_INSTALL=nvm install --latest-npm && npm run production
+      -  FRONTEND_WATCH=nvm install --latest-npm && npm ci && npm run dev-server
+      -  FRONTEND_WATCH_NO_PACKAGE_INSTALL=nvm install --latest-npm && npm run dev-server
+      -  FRONTEND_WATCH_HOST=nvm install --latest-npm && npm ci && npm run dev-server-host
+      -  FRONTEND_WATCH_HOST_NO_PACKAGE_INSTALL=nvm install --latest-npm && npm run dev-server-host

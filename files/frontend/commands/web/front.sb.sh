@@ -18,15 +18,9 @@ else
     fi
 fi
 
-cd "$FRONTEND_PATH" || exit 1
-
-NODE_VERSION=$(node -v)
-NVMRC_NODE_VERSION=$(nvm version "$(cat .nvmrc)")
-if [ "$NVMRC_NODE_VERSION" = "N/A" ]; then
-  nvm install
-elif [ "$NVMRC_NODE_VERSION" != "$NODE_VERSION" ]; then
-  nvm use
-fi
+TEXT_RED=$(tput setaf 1) TEXT_RESET=$(tput sgr0) && if [[ ! -e "${FRONTEND_PATH}" ]]; then echo "${TEXT_RED}No FRONTEND_PATH folder: ${FRONTEND_PATH}${TEXT_RESET}"; fi;
+cd ${FRONTEND_PATH}
+TEXT_RED=$(tput setaf 1) TEXT_RESET=$(tput sgr0) && if [[ ! -e .nvmrc ]]; then echo "${TEXT_RED}No file .nvmrc with node version in folder: ${FRONTEND_PATH}${TEXT_RESET}"; fi;
 
 possibleArguments=(build watch)
 if [[ ! ${possibleArguments[*]} =~ $1 ]]; then
