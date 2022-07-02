@@ -8,5 +8,3 @@ services:
       -  FRONTEND_BUILD_NO_PACKAGE_INSTALL=nvm install --latest-npm && npm run production
       -  FRONTEND_WATCH=nvm install --latest-npm && npm ci && npm run dev-server
       -  FRONTEND_WATCH_NO_PACKAGE_INSTALL=nvm install --latest-npm && npm run dev-server
-      -  FRONTEND_WATCH_HOST=nvm install --latest-npm && npm ci && npm run dev-server-host
-      -  FRONTEND_WATCH_HOST_NO_PACKAGE_INSTALL=nvm install --latest-npm && npm run dev-server-host
