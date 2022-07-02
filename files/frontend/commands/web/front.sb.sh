@@ -18,29 +18,31 @@ else
     fi
 fi
 
-TEXT_RED=$(tput setaf 1) TEXT_RESET=$(tput sgr0) && if [[ ! -e "${FRONTEND_PATH}" ]]; then echo "${TEXT_RED}No FRONTEND_PATH folder: ${FRONTEND_PATH}${TEXT_RESET}"; fi;
+if [[ ! -e "${FRONTEND_PATH}" ]]; then echo "${TEXT_RED}No FRONTEND_PATH folder: ${FRONTEND_PATH}${TEXT_RESET}" && exit 1; fi;
 cd ${FRONTEND_PATH}
-TEXT_RED=$(tput setaf 1) TEXT_RESET=$(tput sgr0) && if [[ ! -e .nvmrc ]]; then echo "${TEXT_RED}No file .nvmrc with node version in folder: ${FRONTEND_PATH}${TEXT_RESET}"; fi;
 
-possibleArguments=(build watch)
-if [[ ! ${possibleArguments[*]} =~ $1 ]]; then
-    info=$(printf ", %s" "${possibleArguments[@]}")
-    info=${info:1}
-    echo "${TEXT_RED}Error! Wrong argument. Possible arguments are:${info}${TEXT_RESET}. If you do not want to install packages add argument -n or --noinstall"
+if [[ ! -e .nvmrc ]]; then echo "${TEXT_RED}No file .nvmrc with node version in folder: ${FRONTEND_PATH}${TEXT_RESET}" && exit 1; fi;
+
+POSSIBLE_ARGUMENTS=(build watch)
+if [[ ! ${POSSIBLE_ARGUMENTS[*]} =~ $1 ]]; then
+    INFO=$(printf ", %s" "${POSSIBLE_ARGUMENTS[@]}")
+    INFO=${INFO:1}
+    echo "${TEXT_RED}Error! Wrong argument. Possible arguments are:${INFO}${TEXT_RESET}. If you do not want to install packages add argument -n or --noinstall"
+    exit 1
 fi
 
 if [[ $1 = "build" ]]; then
     if [[ $NO_INSTALL = "1" ]]; then
-        bash -c "${FRONTEND_BUILD_NO_PACKAGE_INSTALL}"
+        bash -ic "${FRONTEND_BUILD_NO_PACKAGE_INSTALL}"
     else
-        bash -c "${FRONTEND_BUILD}"
+        bash -ic "${FRONTEND_BUILD}"
     fi
 fi
 
 if [[ $1 = "watch" ]]; then
     if [[ $NO_INSTALL = "1" ]]; then
-        bash -c "${FRONTEND_WATCH_NO_PACKAGE_INSTALL}"
+        bash -ic "${FRONTEND_WATCH_NO_PACKAGE_INSTALL}"
     else
-        bash -c "${FRONTEND_WATCH}"
+        bash -ic "${FRONTEND_WATCH}"
     fi
 fi
