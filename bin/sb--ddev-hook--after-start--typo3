@@ -19,4 +19,4 @@ if [ ! -e vendor ]; then composer install ; fi
 if [ "${ASSETS_FRONTEND_DIST}" = "" ]; then echo "${TEXT_RED}Add ASSETS_FRONTEND_DIST to config.yaml->web_environment${TEXT_RESET}" && exit 1 ; fi
 
 # If it is first start then build front
-if [ ! -e "${$ASSETS_FRONTEND_DIST}" ]; then cd "${ASSETS_FRONTEND_SRC}" && bash -ic "${ASSETS_FRONTEND_BUILD}" ; fi
+if [ ! -e "${ASSETS_FRONTEND_DIST}" ]; then cd "${ASSETS_FRONTEND_SRC}" && bash -ic "${ASSETS_FRONTEND_BUILD}" ; fi
