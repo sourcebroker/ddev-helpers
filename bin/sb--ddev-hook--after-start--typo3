@@ -10,13 +10,13 @@ if [ ! -e .env ]; then printf "TYPO3_CONTEXT=\"Development/Staging/Local\" \nINS
 find /var/www/html/var/ -mindepth 1 ! -regex '^/var/www/html/var/labels\(/.*\)?' -delete
 
 # Copy certs for those cases when developer use node in his host instead of inside web container.
-mkdir -p /var/www/html/"$FRONTEND_PATH"/certs && cp /etc/ssl/certs/master.* /var/www/html/"$FRONTEND_PATH"/certs/
+mkdir -p /var/www/html/"$ASSETS_FRONTEND_SRC"/certs && cp /etc/ssl/certs/master.* /var/www/html/"$ASSETS_FRONTEND_SRC"/certs/
 
 # If it is first start then install vendors
 if [ ! -e vendor ]; then composer install ; fi
 
 # Suggestion about adding FRONTEND_OUTPUT_PATH
-if [ "${FRONTEND_OUTPUT_PATH}" = "" ]; then echo "${TEXT_RED}Add FRONTEND_OUTPUT_PATH to config.yaml->web_environment${TEXT_RESET}" && exit 1 ; fi
+if [ "${ASSETS_FRONTEND_DIST}" = "" ]; then echo "${TEXT_RED}Add ASSETS_FRONTEND_DIST to config.yaml->web_environment${TEXT_RESET}" && exit 1 ; fi
 
 # If it is first start then build front
-if [ ! -e "${FRONTEND_OUTPUT_PATH}" ]; then cd "${FRONTEND_PATH}" && bash -ic "${FRONTEND_BUILD}" ; fi
+if [ ! -e "${$ASSETS_FRONTEND_DIST}" ]; then cd "${ASSETS_FRONTEND_SRC}" && bash -ic "${ASSETS_FRONTEND_BUILD}" ; fi

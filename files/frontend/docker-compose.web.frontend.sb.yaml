@@ -4,7 +4,8 @@ version: '3.6'
 services:
   web:
     environment:
-      -  FRONTEND_BUILD=nvm install --latest-npm && npm ci && npm run production
-      -  FRONTEND_BUILD_NO_PACKAGE_INSTALL=nvm install --latest-npm && npm run production
-      -  FRONTEND_WATCH=nvm install --latest-npm && npm ci && npm run dev-server
-      -  FRONTEND_WATCH_NO_PACKAGE_INSTALL=nvm install --latest-npm && npm run dev-server
+      -  ASSETS_FRONTEND_BUILD=nvm install --latest-npm && npm ci && npm run production
+      -  ASSETS_FRONTEND_BUILD_NO_PACKAGE_INSTALL=nvm install --latest-npm && npm run production
+      -  ASSETS_FRONTEND_WATCH=nvm install --latest-npm && npm ci && npm run dev-server
+      -  ASSETS_FRONTEND_WATCH_NO_PACKAGE_INSTALL=nvm install --latest-npm && npm run dev-server
+      -  ASSETS_FRONTEND_BUILD_DEPLOY=.ddev/commands/web/front.sb.sh build

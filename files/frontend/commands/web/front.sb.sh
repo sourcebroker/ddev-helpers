@@ -18,10 +18,10 @@ else
     fi
 fi
 
-if [[ ! -e "${FRONTEND_PATH}" ]]; then echo "${TEXT_RED}No FRONTEND_PATH folder: ${FRONTEND_PATH}${TEXT_RESET}" && exit 1; fi;
-cd ${FRONTEND_PATH}
+if [[ ! -e "${ASSETS_FRONTEND_SRC}" ]]; then echo "${TEXT_RED}No ASSETS_FRONTEND_SRC folder: ${ASSETS_FRONTEND_SRC}${TEXT_RESET}" && exit 1; fi;
+cd ${ASSETS_FRONTEND_SRC}
 
-if [[ ! -e .nvmrc ]]; then echo "${TEXT_RED}No file .nvmrc with node version in folder: ${FRONTEND_PATH}${TEXT_RESET}" && exit 1; fi;
+if [[ ! -e .nvmrc ]]; then echo "${TEXT_RED}No file .nvmrc with node version in folder: ${ASSETS_FRONTEND_SRC}${TEXT_RESET}" && exit 1; fi;
 
 POSSIBLE_ARGUMENTS=(build watch)
 if [[ ! ${POSSIBLE_ARGUMENTS[*]} =~ $1 ]]; then
@@ -33,16 +33,16 @@ fi
 
 if [[ $1 = "build" ]]; then
     if [[ $NO_INSTALL = "1" ]]; then
-        bash -ic "${FRONTEND_BUILD_NO_PACKAGE_INSTALL}"
+        bash -ic "${ASSETS_FRONTEND_BUILD_NO_PACKAGE_INSTALL}"
     else
-        bash -ic "${FRONTEND_BUILD}"
+        bash -ic "${ASSETS_FRONTEND_BUILD}"
     fi
 fi
 
 if [[ $1 = "watch" ]]; then
     if [[ $NO_INSTALL = "1" ]]; then
-        bash -ic "${FRONTEND_WATCH_NO_PACKAGE_INSTALL}"
+        bash -ic "${ASSETS_FRONTEND_WATCH_NO_PACKAGE_INSTALL}"
     else
-        bash -ic "${FRONTEND_WATCH}"
+        bash -ic "${ASSETS_FRONTEND_WATCH}"
     fi
 fi
