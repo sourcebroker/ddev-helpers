@@ -1,2 +1,3 @@
+#sb-generated
 [mysqld]
 slow_query_log_file = "/var/lib/mysql/slow_log.log"
