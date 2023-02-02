@@ -15,17 +15,17 @@ if [[ ! -e $mainDirWithType ]]; then
     echo
     exit 1
 fi
-echo "${TEXT_GREEN}Coping ddev-helpers commands for type '${type}'${TEXT_RESET}"
+#echo "${TEXT_GREEN}Coping ddev-helpers commands for type '${type}'${TEXT_RESET}"
 find "$mainDirWithType" -type f -print0 |
     while IFS= read -r -d '' sourceFile; do
         copy=0
         targetFile="${sourceFile/$mainDirWithType/}"
         targetDirWithType="${targetDir}$(dirname "$targetFile")"
         if [[ ! -e $targetDir$targetFile ]]; then
-          echo "- ${TEXT_GREEN}copy ${sourceFile} to ${targetDirWithType} (target file does not yet exist - first copy)${TEXT_RESET}"
+          #echo "- ${TEXT_GREEN}copy ${sourceFile} to ${targetDirWithType} (target file does not yet exist - first copy)${TEXT_RESET}"
           copy=1
         elif grep -q -e "#sb-generated" -e "#ddev-generated" "$targetDir$targetFile" ; then
-          echo "- ${TEXT_GREEN}copy ${sourceFile} to ${targetDirWithType} (target exists but is sb-generated so can be updated)${TEXT_RESET}"
+          #echo "- ${TEXT_GREEN}copy ${sourceFile} to ${targetDirWithType} (target exists but is sb-generated so can be updated)${TEXT_RESET}"
           copy=1
         fi
 
