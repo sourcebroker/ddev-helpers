@@ -21,6 +21,15 @@ find "$mainDirWithType" -type f -print0 |
         copy=0
         targetFile="${sourceFile/$mainDirWithType/}"
         targetDirWithType="${targetDir}$(dirname "$targetFile")"
+
+        if grep -q -e "#sb-generated-deleted" "$sourceFile" ; then
+          if [[ -e "$targetDir$targetFile" ]]; then
+            #echo "- ${TEXT_RED}rm ${targetDirWithType} as ${sourceFile} has #sb-generated-deleted${TEXT_RESET}"
+            rm "$targetDir$targetFile"
+          fi
+          continue
+        fi;
+
         if [[ ! -e $targetDir$targetFile ]]; then
           #echo "- ${TEXT_GREEN}copy ${sourceFile} to ${targetDirWithType} (target file does not yet exist - first copy)${TEXT_RESET}"
           copy=1
