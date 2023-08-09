@@ -4,6 +4,14 @@ TEXT_GREEN=$(tput setaf 2)
 TEXT_RED=$(tput setaf 1)
 TEXT_RESET=$(tput sgr0)
 
+DEBUG=${DDEV_HELPERS_DEBUG:-0}
+
+debug_echo() {
+  if [[ $DEBUG == 1 ]]; then
+    echo "$@"
+  fi
+}
+
 sourceDir="../files"
 targetDir="../.."
 
@@ -15,7 +23,7 @@ if [[ ! -e $mainDirWithType ]]; then
     echo
     exit 1
 fi
-#echo "${TEXT_GREEN}Coping ddev-helpers commands for type '${type}'${TEXT_RESET}"
+debug_echo "${TEXT_GREEN}Coping ddev-helpers commands for type '${type}'${TEXT_RESET}"
 find "$mainDirWithType" -type f -print0 |
     while IFS= read -r -d '' sourceFile; do
         copy=0
@@ -24,17 +32,17 @@ find "$mainDirWithType" -type f -print0 |
 
         if grep -q -e "#sb-generated-deleted" "$sourceFile" ; then
           if [[ -e "$targetDir$targetFile" ]]; then
-            #echo "- ${TEXT_RED}rm ${targetDirWithType} as ${sourceFile} has #sb-generated-deleted${TEXT_RESET}"
+            debug_echo "- ${TEXT_RED}rm ${targetDirWithType} as ${sourceFile} has #sb-generated-deleted${TEXT_RESET}"
             rm "$targetDir$targetFile"
           fi
           continue
         fi;
 
         if [[ ! -e $targetDir$targetFile ]]; then
-          #echo "- ${TEXT_GREEN}copy ${sourceFile} to ${targetDirWithType} (target file does not yet exist - first copy)${TEXT_RESET}"
+          debug_echo "- ${TEXT_GREEN}copy ${sourceFile} to ${targetDirWithType} (target file does not yet exist - first copy)${TEXT_RESET}"
           copy=1
         elif grep -q -e "#sb-generated" -e "#ddev-generated" "$targetDir$targetFile" ; then
-          #echo "- ${TEXT_GREEN}copy ${sourceFile} to ${targetDirWithType} (target exists but is sb-generated so can be updated)${TEXT_RESET}"
+          debug_echo "- ${TEXT_GREEN}copy ${sourceFile} to ${targetDirWithType} (target exists but is sb-generated so can be updated)${TEXT_RESET}"
           copy=1
         fi
 
