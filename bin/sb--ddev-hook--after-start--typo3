@@ -3,19 +3,37 @@
 TEXT_RED=$(tput setaf 1)
 TEXT_RESET=$(tput sgr0)
 
+delete_files_in_var() {
+  local DEFAULT_EXCLUDE_DIRS="labels"
+  local USER_EXCLUDE_DIRS="${EXCLUDE_VAR_DIRS_TO_DELETE:-}"
+  local COMBINED_EXCLUDE_DIRS
+
+  if [ -n "$USER_EXCLUDE_DIRS" ]; then
+    COMBINED_EXCLUDE_DIRS="${DEFAULT_EXCLUDE_DIRS},${USER_EXCLUDE_DIRS}"
+  else
+    COMBINED_EXCLUDE_DIRS="${DEFAULT_EXCLUDE_DIRS}"
+  fi
+
+  IFS=',' read -r -a EXCLUDE_ARRAY <<< "$COMBINED_EXCLUDE_DIRS"
+
+  local EXCLUDE_REGEX=""
+  for dir in "${EXCLUDE_ARRAY[@]}"; do
+    EXCLUDE_REGEX+="! -regex '^/var/www/html/var/${dir}\(/.*\)?' "
+  done
+
+  eval "find /var/www/html/var/ -mindepth 1 ${EXCLUDE_REGEX} -delete"
+}
+
+# Delete all cache files in /var/ except 'labels' folder and defined in $EXCLUDE_VAR_DIRS_TO_DELETE .
+delete_files_in_var
+
 # Create TYPO3_CONTEXT. It allows to easily switch between Development/Production and Instances.
 if [ ! -e .env ]; then printf "TYPO3_CONTEXT=\"Development/Staging/Local\" \nINSTANCE=\"local\"" > .env ; fi
-
-# Delete all cache files in /var/ except labels which are in git.
-find /var/www/html/var/ -mindepth 1 ! -regex '^/var/www/html/var/labels\(/.*\)?' -delete
 
 # If it is first start then install vendors
 if [ ! -e vendor ]; then composer install ; fi
 
 if [ ! "${ASSETS_FRONTEND_ENABLE}" = "0" ]; then
-
-  # Copy certs for those cases when developer use node in his host instead of inside web container.
-  mkdir -p /var/www/html/"$ASSETS_FRONTEND_SRC"/certs && cp /etc/ssl/certs/master.* /var/www/html/"$ASSETS_FRONTEND_SRC"/certs/
 
   # Suggestion about adding FRONTEND_OUTPUT_PATH
   if [ "${ASSETS_FRONTEND_DIST}" = "" ]; then echo "${TEXT_RED}Add ASSETS_FRONTEND_DIST to config.yaml->web_environment${TEXT_RESET}" && exit 1 ; fi
