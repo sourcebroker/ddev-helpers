@@ -1,6 +1,5 @@
 #sb-generated
 
-version: '3.6'
 services:
   web:
     environment:

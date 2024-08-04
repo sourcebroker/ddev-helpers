@@ -3,7 +3,6 @@
 # Expose encore dev-server port inside web container.
 # If you want to set up different port set hooks you need to run FRONTEND_WATCH_PORT=xxxx before ddev start (TODO)
 
-version: '3.6'
 services:
   web:
     ports:
