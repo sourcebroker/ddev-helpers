@@ -2,4 +2,3 @@
 
 bash ./sb-copy general
 bash ./sb-copy frontend
-bash ./sb-copy typo3
