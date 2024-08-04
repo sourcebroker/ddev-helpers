@@ -8,6 +8,8 @@
 TEXT_RED=$(tput setaf 1)
 TEXT_RESET=$(tput sgr0)
 
+if [[ ! -e "${ENCORE_SB_CONFIG}" ]]; then echo "${TEXT_RED}Looks like first install of project. Please do 'ddev restart' to apply all configs.${TEXT_RESET}" && exit 1; fi;
+
 NO_INSTALL=0
 if [[ $2 = "-n" ]] || [[ $2 = "--no-install" ]]; then
     NO_INSTALL=1

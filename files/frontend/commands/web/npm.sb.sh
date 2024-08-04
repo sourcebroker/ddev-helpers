@@ -8,6 +8,8 @@
 TEXT_RED=$(tput setaf 1)
 TEXT_RESET=$(tput sgr0)
 
+if [[ ! -e "${ENCORE_SB_CONFIG}" ]]; then echo "${TEXT_RED}Looks like first install of project. Please do 'ddev restart' to apply all configs.${TEXT_RESET}" && exit 1; fi;
+
 if [[ ! -e "${ASSETS_FRONTEND_SRC}" ]]; then echo "${TEXT_RED}No ASSETS_FRONTEND_SRC folder: ${ASSETS_FRONTEND_SRC}${TEXT_RESET}" && exit 1; fi;
 cd "${ASSETS_FRONTEND_SRC}" || exit 1
 

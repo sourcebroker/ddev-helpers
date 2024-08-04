@@ -1,0 +1,18 @@
+#sb-generated
+
+web_extra_exposed_ports:
+  - name: encore
+    container_port: 8080
+    http_port: 8081
+    https_port: 8080
+
+web_environment:
+  - ENCORE_SB_CONFIG=1
+  - ASSETS_FRONTEND_SRC=assets
+  - ASSETS_FRONTEND_DIST=public/assets/frontend/build
+  - ASSETS_FRONTEND_DIST_REMOTE=public/assets/frontend/build
+  - ASSETS_FRONTEND_BUILD=nvm install --latest-npm && npm ci && npm run production
+  - ASSETS_FRONTEND_BUILD_NO_PACKAGE_INSTALL=nvm install --latest-npm && npm run production
+  - ASSETS_FRONTEND_WATCH=nvm install --latest-npm && npm ci && npm run dev-server
+  - ASSETS_FRONTEND_WATCH_NO_PACKAGE_INSTALL=nvm install --latest-npm && npm run dev-server
+  - ASSETS_FRONTEND_BUILD_DEPLOY=.ddev/commands/web/front.sb.sh build
