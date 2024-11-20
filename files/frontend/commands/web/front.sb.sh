@@ -9,13 +9,61 @@ TEXT_RED=$(tput setaf 1)
 TEXT_RESET=$(tput sgr0)
 
 NO_INSTALL=0
-if [[ $2 = "-n" ]] || [[ $2 = "--no-install" ]]; then
-    NO_INSTALL=1
-else
-    if [[ ! $2 = "" ]]; then
-        echo "${TEXT_RED}No such option: '$2'. Possible option is -n (--no-install)".
-        exit 1
-    fi
+CONFIG=""
+COMMAND=""
+
+for arg in "$@"; do
+  case $arg in
+    -n|--no-install)
+      NO_INSTALL=1
+      shift
+      ;;
+    -c|--config)
+      CONFIG="${2}"
+      shift 2
+      ;;
+    --config=*)
+      CONFIG="${arg#*=}"
+      shift
+      ;;
+    build|watch)
+      COMMAND=$arg
+      shift
+      ;;
+    *)
+      ;;
+  esac
+done
+
+if [[ -z "$COMMAND" ]]; then
+  echo "${TEXT_RED}Error! Wrong argument. Possible arguments are: build, watch. If you do not want to install packages add argument -n or --noinstall${TEXT_RESET}"
+  exit 1
+fi
+
+if [[ -n "${CONFIG}" ]]; then
+  ASSETS_FRONTEND_SRC_VAR="ASSETS_FRONTEND_SRC_${CONFIG}"
+  ASSETS_FRONTEND_DIST_VAR="ASSETS_FRONTEND_DIST_${CONFIG}"
+  ASSETS_FRONTEND_BUILD_VAR="ASSETS_FRONTEND_BUILD_${CONFIG}"
+  ASSETS_FRONTEND_BUILD_NO_PACKAGE_INSTALL_VAR="ASSETS_FRONTEND_BUILD_NO_PACKAGE_INSTALL_${CONFIG}"
+  ASSETS_FRONTEND_WATCH_VAR="ASSETS_FRONTEND_WATCH_${CONFIG}"
+  ASSETS_FRONTEND_WATCH_NO_PACKAGE_INSTALL_VAR="ASSETS_FRONTEND_WATCH_NO_PACKAGE_INSTALL_${CONFIG}"
+
+  if [[ -z $(eval echo \$$ASSETS_FRONTEND_SRC_VAR) ]]; then
+    echo "${TEXT_RED}The config for \`${CONFIG}\` is not set (checked ASSETS_FRONTEND_SRC_${CONFIG})${TEXT_RESET}"
+    exit 1
+  fi
+
+  if [[ -z $(eval echo \$$ASSETS_FRONTEND_DIST_VAR) ]]; then
+    echo "${TEXT_RED}The config for \`${CONFIG}\` is not set (checked ASSETS_FRONTEND_DIST_${CONFIG})${TEXT_RESET}"
+    exit 1
+  fi
+
+  [[ -n $(eval echo \$$ASSETS_FRONTEND_SRC_VAR) ]] && ASSETS_FRONTEND_SRC=$(eval echo \$$ASSETS_FRONTEND_SRC_VAR)
+  [[ -n $(eval echo \$$ASSETS_FRONTEND_DIST_VAR) ]] && ASSETS_FRONTEND_DIST=$(eval echo \$$ASSETS_FRONTEND_DIST_VAR)
+  [[ -n $(eval echo \$$ASSETS_FRONTEND_BUILD_VAR) ]] && ASSETS_FRONTEND_BUILD=$(eval echo \$$ASSETS_FRONTEND_BUILD_VAR)
+  [[ -n $(eval echo \$$ASSETS_FRONTEND_BUILD_NO_PACKAGE_INSTALL_VAR) ]] && ASSETS_FRONTEND_BUILD_NO_PACKAGE_INSTALL=$(eval echo \$$ASSETS_FRONTEND_BUILD_NO_PACKAGE_INSTALL_VAR)
+  [[ -n $(eval echo \$$ASSETS_FRONTEND_WATCH_VAR) ]] && ASSETS_FRONTEND_WATCH=$(eval echo \$$ASSETS_FRONTEND_WATCH_VAR)
+  [[ -n $(eval echo \$$ASSETS_FRONTEND_WATCH_NO_PACKAGE_INSTALL_VAR) ]] && ASSETS_FRONTEND_WATCH_NO_PACKAGE_INSTALL=$(eval echo \$$ASSETS_FRONTEND_WATCH_NO_PACKAGE_INSTALL_VAR)
 fi
 
 if [[ ! -e "${ASSETS_FRONTEND_SRC}" ]]; then echo "${TEXT_RED}No ASSETS_FRONTEND_SRC folder: ${ASSETS_FRONTEND_SRC}${TEXT_RESET}" && exit 1; fi;
@@ -23,15 +71,7 @@ cd "${ASSETS_FRONTEND_SRC}" || exit 1
 
 if [[ ! -e .nvmrc ]]; then echo "${TEXT_RED}No file .nvmrc with node version in folder: ${ASSETS_FRONTEND_SRC}${TEXT_RESET}" && exit 1; fi;
 
-POSSIBLE_ARGUMENTS=(build watch)
-if [[ ! ${POSSIBLE_ARGUMENTS[*]} =~ $1 ]]; then
-    INFO=$(printf ", %s" "${POSSIBLE_ARGUMENTS[@]}")
-    INFO=${INFO:1}
-    echo "${TEXT_RED}Error! Wrong argument. Possible arguments are:${INFO}${TEXT_RESET}. If you do not want to install packages add argument -n or --noinstall"
-    exit 1
-fi
-
-if [[ $1 = "build" ]]; then
+if [[ $COMMAND = "build" ]]; then
     if [[ $NO_INSTALL = "1" ]]; then
         bash -ic "${ASSETS_FRONTEND_BUILD_NO_PACKAGE_INSTALL}"
     else
@@ -39,7 +79,7 @@ if [[ $1 = "build" ]]; then
     fi
 fi
 
-if [[ $1 = "watch" ]]; then
+if [[ $COMMAND = "watch" ]]; then
     if [[ $NO_INSTALL = "1" ]]; then
         bash -ic "${ASSETS_FRONTEND_WATCH_NO_PACKAGE_INSTALL}"
     else
