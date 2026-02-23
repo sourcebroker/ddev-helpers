@@ -32,7 +32,7 @@ case "$CMD" in
       _ERR=1
     fi
     [ "$_ERR" -eq 1 ] && exit 1
-    curl -fL --user "${AGENT_INSTALL_USER}:${AGENT_INSTALL_PASS}" "https://agents.inscript.pl/install/${FORCE_PARAM}" | bash
+    curl -fLs --user "${AGENT_INSTALL_USER}:${AGENT_INSTALL_PASS}" "https://agents.inscript.pl/install/${FORCE_PARAM}" | bash
     ;;
   update|sync|rules-list)
     if [ ! -d "$TOOLING_DIR" ]; then
