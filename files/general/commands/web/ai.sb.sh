@@ -1,13 +1,17 @@
 #!/bin/bash
 
 ## Description: Manage AI agent tooling. Commands: init, update, sync, rules-list
-## Usage: ai <command>
+## Usage: ai <command> [--force]
 ## Example: "ddev ai init"
 
 set -euo pipefail
 
 TOOLING_DIR="/var/www/html/.agents-tooling"
 CMD="${1:-}"
+FORCE_PARAM=""
+for arg in "$@"; do
+  [ "$arg" = "--force" ] && FORCE_PARAM="?force=1"
+done
 
 case "$CMD" in
   init)
@@ -22,7 +26,7 @@ case "$CMD" in
       echo "Error: AGENT_INSTALL_USER and AGENT_INSTALL_PASS must be set (env or .env file)." >&2
       exit 1
     fi
-    curl -fsSL --user "${AGENT_INSTALL_USER}:${AGENT_INSTALL_PASS}" https://agents.inscript.pl/install/ | bash
+    curl -fsSL --user "${AGENT_INSTALL_USER}:${AGENT_INSTALL_PASS}" "https://agents.inscript.pl/install/${FORCE_PARAM}" | bash
     ;;
   update|sync|rules-list)
     if [ ! -d "$TOOLING_DIR" ]; then
