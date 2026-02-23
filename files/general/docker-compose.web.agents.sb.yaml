@@ -1,0 +1,10 @@
+#sb-generated
+
+services:
+  web:
+    environment:
+      - ASSETS_FRONTEND_BUILD=nvm install --latest-npm && npm ci -no-audit --no-fund && npm run production
+      - ASSETS_FRONTEND_BUILD_NO_PACKAGE_INSTALL=nvm install --latest-npm && npm run production
+      - AGENT_INSTALL_USER
+      - AGENT_INSTALL_PASS
+      - AGENT_AI_TOOL
