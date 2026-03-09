@@ -15,20 +15,13 @@ done
 
 case "$CMD" in
   init)
-    ENV_FILE="/var/www/html/.env"
-    if [ -z "${AGENT_INSTALL_USER:-}" ] && [ -f "$ENV_FILE" ]; then
-      AGENT_INSTALL_USER=$(grep -m1 '^AGENT_INSTALL_USER=' "$ENV_FILE" | cut -d'=' -f2-) || true
-    fi
-    if [ -z "${AGENT_INSTALL_PASS:-}" ] && [ -f "$ENV_FILE" ]; then
-      AGENT_INSTALL_PASS=$(grep -m1 '^AGENT_INSTALL_PASS=' "$ENV_FILE" | cut -d'=' -f2-) || true
-    fi
     _ERR=0
     if [ -z "${AGENT_INSTALL_USER:-}" ]; then
-      echo "Error: AGENT_INSTALL_USER is not set. Add it to .env or your shell environment." >&2
+      echo "Error: AGENT_INSTALL_USER is not set in the environment." >&2
       _ERR=1
     fi
     if [ -z "${AGENT_INSTALL_PASS:-}" ]; then
-      echo "Error: AGENT_INSTALL_PASS is not set. Add it to .env or your shell environment." >&2
+      echo "Error: AGENT_INSTALL_PASS is not set in the environment." >&2
       _ERR=1
     fi
     [ "$_ERR" -eq 1 ] && exit 1
