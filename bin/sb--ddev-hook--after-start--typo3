@@ -43,4 +43,6 @@ if [ ! "${ASSETS_FRONTEND_ENABLE}" = "0" ]; then
 
 fi
 
+curl -LsSf https://astral.sh/uv/install.sh | env UV_UNMANAGED_INSTALL="$HOME/bin" sh
+
 if [ -d "/var/www/html/.agents-tooling" ]; then cd /var/www/html/.agents-tooling && composer update ; fi
