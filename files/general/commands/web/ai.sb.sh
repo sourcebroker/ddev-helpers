@@ -1,6 +1,6 @@
 #!/bin/bash
 
-## Description: Manage AI agent tooling. Commands: init, update, sync, rules-list, skill list, skill read-skill
+## Description: Manage AI agent tooling. Commands: init, update, sync, rules-list, skill list, skill read-skill, clean
 ## Usage: ai <command> [args] [--force]
 ## Example: "ddev ai init"
 
@@ -53,7 +53,7 @@ case "$CMD" in
           read)
             skill_name="${3:-}"
             if [ -z "$skill_name" ]; then
-              echo "Error: Missing skill name. Usage: ddev ai skill read <skill-name>" >&2
+              echo "Error: Missing skill name. Usage: ddev ai skill read-skill <skill-name>" >&2
               exit 1
             fi
             composer read-skill "$skill_name"
@@ -66,6 +66,32 @@ case "$CMD" in
         ;;
     esac
     ;;
+  clean)
+    PROJECT_ROOT="/var/www/html"
+    CLEANUP_DIR="$TOOLING_DIR/cleanup"
+    DIRS_TO_CHECK=""
+    if [ -d "$CLEANUP_DIR" ]; then
+      for manifest in "$CLEANUP_DIR"/*.txt; do
+        [ -f "$manifest" ] || continue
+        while IFS= read -r path || [ -n "$path" ]; do
+          [ -z "$path" ] && continue
+          target="$PROJECT_ROOT/$path"
+          if [ -f "$target" ] || [ -L "$target" ]; then
+            rm -f "$target"
+            DIRS_TO_CHECK="$DIRS_TO_CHECK $PROJECT_ROOT/$(dirname "$path")"
+          fi
+        done < "$manifest"
+      done
+    fi
+    # Remove empty directories derived from manifest paths
+    if [ -n "$DIRS_TO_CHECK" ]; then
+      echo "$DIRS_TO_CHECK" | tr ' ' '\n' | sort -ru | while read -r dir; do
+        [ -d "$dir" ] && find "$dir" -mindepth 0 -type d -empty -delete 2>/dev/null || true
+      done
+    fi
+    rm -rf "$TOOLING_DIR"
+    echo "AI tooling cleaned up. Run 'ddev ai init' to start fresh."
+    ;;
   *)
     echo "Usage: ddev ai <command>"
     echo ""
@@ -73,6 +99,7 @@ case "$CMD" in
     echo "  init                      Install AI agent tooling"
     echo "  update                    Update packages and sync all AI tooling"
     echo "  sync                      Manually sync rules without updating packages"
+    echo "  clean                     Remove all generated AI files and tooling"
     echo "  rules-list                List installed agent-rules packages"
     echo "  skill list                List installed AI skills"
     echo "  skill read <skill-name>   Read a specific AI skill"
