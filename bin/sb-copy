@@ -51,3 +51,44 @@ find "$mainDirWithType" -type f -print0 |
             cp "$sourceFile" "$targetDirWithType"
         fi
     done
+
+gitignoreFile="$targetDir/.gitignore"
+gitignoreEntries=(
+    "/.ddev/**/*.sb.*"
+    "/.ddev/.ddev-helpers"
+    "/.ddev/commands/web/npm"
+)
+
+if [[ -f "$gitignoreFile" ]]; then
+    missingEntries=()
+    lastFoundLine=0
+
+    for entry in "${gitignoreEntries[@]}"; do
+        if grep -qxF "$entry" "$gitignoreFile"; then
+            lineNum=$(grep -nxF "$entry" "$gitignoreFile" | tail -1 | cut -d: -f1)
+            if [[ $lineNum -gt $lastFoundLine ]]; then
+                lastFoundLine=$lineNum
+            fi
+        else
+            missingEntries+=("$entry")
+        fi
+    done
+
+    if [[ ${#missingEntries[@]} -gt 0 ]]; then
+        if [[ $lastFoundLine -gt 0 ]]; then
+            newLines=$(printf '%s\n' "${missingEntries[@]}")
+            tmpFile=$(mktemp)
+            awk -v insertLine="$lastFoundLine" -v newLines="$newLines" '
+                NR == insertLine { print; printf "%s", newLines; next }
+                { print }
+            ' "$gitignoreFile" > "$tmpFile" && mv "$tmpFile" "$gitignoreFile"
+        else
+            {
+                echo ""
+                printf '%s\n' "${missingEntries[@]}"
+            } >> "$gitignoreFile"
+        fi
+        debug_echo "${TEXT_GREEN}Added missing .gitignore entries: ${missingEntries[*]}${TEXT_RESET}"
+    fi
+fi
+
