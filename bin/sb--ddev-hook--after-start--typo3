@@ -42,7 +42,3 @@ if [ ! "${ASSETS_FRONTEND_ENABLE}" = "0" ]; then
   if [ ! -e "${ASSETS_FRONTEND_DIST}" ]; then cd "${ASSETS_FRONTEND_SRC}" && bash -ic "${ASSETS_FRONTEND_BUILD}" ; fi
 
 fi
-
-curl -LsSf https://astral.sh/uv/install.sh | env UV_UNMANAGED_INSTALL="$HOME/bin" sh
-
-if [ -d "/var/www/html/.agents-tooling" ]; then cd /var/www/html/.agents-tooling && composer update ; fi
