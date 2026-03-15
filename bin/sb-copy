@@ -61,11 +61,15 @@ gitignoreEntries=(
 
 if [[ -f "$gitignoreFile" ]]; then
     missingEntries=()
+    firstFoundLine=0
     lastFoundLine=0
 
     for entry in "${gitignoreEntries[@]}"; do
         if grep -qxF "$entry" "$gitignoreFile"; then
             lineNum=$(grep -nxF "$entry" "$gitignoreFile" | tail -1 | cut -d: -f1)
+            if [[ $firstFoundLine -eq 0 ]]; then
+                firstFoundLine=$lineNum
+            fi
             if [[ $lineNum -gt $lastFoundLine ]]; then
                 lastFoundLine=$lineNum
             fi
@@ -76,19 +80,33 @@ if [[ -f "$gitignoreFile" ]]; then
 
     if [[ ${#missingEntries[@]} -gt 0 ]]; then
         if [[ $lastFoundLine -gt 0 ]]; then
-            newLines=$(printf '%s\n' "${missingEntries[@]}")
             tmpFile=$(mktemp)
-            awk -v insertLine="$lastFoundLine" -v newLines="$newLines" '
-                NR == insertLine { print; printf "%s", newLines; next }
-                { print }
-            ' "$gitignoreFile" > "$tmpFile" && mv "$tmpFile" "$gitignoreFile"
+            head -n "$lastFoundLine" "$gitignoreFile" > "$tmpFile"
+            printf '%s\n' "${missingEntries[@]}" >> "$tmpFile"
+            tail -n "+$((lastFoundLine + 1))" "$gitignoreFile" >> "$tmpFile"
+            mv "$tmpFile" "$gitignoreFile"
         else
             {
                 echo ""
+                echo "# ddev-helpers entries"
                 printf '%s\n' "${missingEntries[@]}"
+                echo ""
             } >> "$gitignoreFile"
         fi
         debug_echo "${TEXT_GREEN}Added missing .gitignore entries: ${missingEntries[*]}${TEXT_RESET}"
+    fi
+
+    # Ensure comment line exists before the first entry
+    if [[ $firstFoundLine -gt 0 ]]; then
+        prevLine=$(sed -n "$((firstFoundLine - 1))p" "$gitignoreFile")
+        if [[ "$prevLine" != "# ddev-helpers entries" ]]; then
+            tmpFile=$(mktemp)
+            head -n "$((firstFoundLine - 1))" "$gitignoreFile" > "$tmpFile"
+            echo "# ddev-helpers entries" >> "$tmpFile"
+            tail -n "+${firstFoundLine}" "$gitignoreFile" >> "$tmpFile"
+            mv "$tmpFile" "$gitignoreFile"
+            debug_echo "${TEXT_GREEN}Added missing .gitignore comment before ddev-helpers entries${TEXT_RESET}"
+        fi
     fi
 fi
 
