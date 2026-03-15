@@ -83,6 +83,7 @@ if [[ -f "$gitignoreFile" ]]; then
             tmpFile=$(mktemp)
             head -n "$lastFoundLine" "$gitignoreFile" > "$tmpFile"
             printf '%s\n' "${missingEntries[@]}" >> "$tmpFile"
+            echo "" >> "$tmpFile"
             tail -n "+$((lastFoundLine + 1))" "$gitignoreFile" >> "$tmpFile"
             mv "$tmpFile" "$gitignoreFile"
         else
