@@ -52,7 +52,7 @@ find "$mainDirWithType" -type f -print0 |
         fi
     done
 
-gitignoreFile="$targetDir/.gitignore"
+gitignoreFile="$targetDir/../.gitignore"
 gitignoreEntries=(
     "/.ddev/**/*.sb.*"
     "/.ddev/.ddev-helpers"
