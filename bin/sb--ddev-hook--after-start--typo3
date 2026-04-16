@@ -43,4 +43,4 @@ if [ ! "${ASSETS_FRONTEND_ENABLE}" = "0" ]; then
 
 fi
 
-node -e "process.exit(require(''./assets/package.json'').packageManager ? 0 : 1)" 2>/dev/null && corepack enable npm
+grep -q packageManager assets/package.json && corepack enable npm || true
