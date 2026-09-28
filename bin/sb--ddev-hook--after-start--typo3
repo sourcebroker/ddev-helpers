@@ -31,7 +31,9 @@ delete_files_in_var
 if [ ! -e .env ]; then printf "TYPO3_CONTEXT=\"Development/Staging/Local\" \nINSTANCE=\"local\"" > .env ; fi
 
 # If it is first start then install vendors
-if [ ! -e vendor ]; then composer install ; fi
+if [ "${COMPOSER_INSTALL_ENABLE:-1}" != "0" ] && [ ! -e vendor ]; then
+  composer install
+fi
 
 if [ ! "${ASSETS_FRONTEND_ENABLE}" = "0" ]; then
 
